@@ -1,0 +1,11 @@
+{
+  "name": "干瞪眼",
+  "short_name": "干瞪眼",
+  "description": "干瞪眼卡牌对战游戏",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait",
+  "icons": []
+}

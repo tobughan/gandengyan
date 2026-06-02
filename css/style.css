@@ -1,0 +1,132 @@
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1a2e;--bg2:#16213e;--card-w:48px;--card-h:68px;--green:#4CAF50;--red:#e53935;--text:#fff;--text2:#aaa;--accent:#ffd54f}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100dvh;user-select:none;-webkit-user-select:none}
+#app{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.screen{display:none;flex-direction:column;height:100%;width:100%;position:absolute;top:0;left:0}
+.screen.active{display:flex}
+
+/* Menu */
+.menu-content{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px}
+.game-title{font-size:48px;letter-spacing:8px;color:var(--accent);text-shadow:0 2px 10px rgba(255,213,79,.3)}
+.game-subtitle{font-size:16px;color:var(--text2);margin-bottom:32px}
+.menu-buttons{display:flex;flex-direction:column;gap:12px;width:200px}
+
+/* Setup */
+.setup-content{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:20px;padding:20px}
+.setup-content h2{font-size:24px;margin-bottom:8px}
+.setting-group{text-align:center}
+.setting-label{display:block;font-size:14px;color:var(--text2);margin-bottom:8px}
+.option-group{display:flex;gap:8px;justify-content:center}
+.option-btn{padding:8px 16px;border:1px solid #444;background:var(--bg2);color:var(--text);border-radius:6px;cursor:pointer;font-size:14px;transition:.15s}
+.option-btn.active{background:var(--green);border-color:var(--green)}
+.option-btn:hover{background:#333}
+
+/* Buttons */
+.btn{padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-size:15px;transition:transform .1s,opacity .15s}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:var(--green);color:#fff}
+.btn-secondary{background:#444;color:var(--text)}
+.btn-outline{background:transparent;border:1px solid #555;color:var(--text)}
+.btn-link{background:none;border:none;color:var(--text2);cursor:pointer;text-decoration:underline;font-size:13px;padding:4px}
+.btn-large{width:100%;padding:14px 24px;font-size:17px}
+.btn-icon{background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Dice */
+.dice-content{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:20px;padding:20px}
+.dice-players{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.dice-player{text-align:center;padding:12px}
+.dice-player .name{font-size:13px;color:var(--text2);margin-bottom:6px}
+.dice-player .dice{width:50px;height:50px;background:var(--bg2);border:2px solid #444;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto;transition:.3s}
+.dice-player.dealer .dice{border-color:var(--accent);background:#2a2a3e}
+.dice-player.dealer .name{color:var(--accent);font-weight:bold}
+.dice-player.dealer::after{content:'庄家';font-size:11px;color:var(--accent);display:block;margin-top:4px}
+.dice-rolling .dice{animation:shake .15s infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+.dice-result-msg{font-size:15px;color:var(--accent);min-height:24px;text-align:center}
+
+/* Game */
+#game-header{display:flex;align-items:center;padding:6px 12px;background:var(--bg2);gap:12px;flex-shrink:0;font-size:14px}
+#game-info{flex:1;text-align:center}
+#deck-count{font-size:13px;color:var(--text2)}
+#game-board{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+#ai-area{display:flex;justify-content:space-around;padding:6px;gap:6px;flex-shrink:0}
+.ai-player{text-align:center;min-width:60px}
+.ai-player .name{font-size:11px;color:var(--text2);margin-bottom:2px}
+.ai-player .count{font-size:10px;color:var(--text2)}
+.ai-player .back-cards{display:flex;gap:2px;justify-content:center}
+.ai-player.active .name{color:var(--accent);font-weight:bold}
+
+.card-back{width:28px;height:40px;background:linear-gradient(135deg,#283593,#3949ab);border-radius:4px;display:inline-block;border:1px solid #5c6bc0}
+
+#play-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;gap:10px;min-height:120px}
+#play-cards{display:flex;gap:6px;align-items:center;justify-content:center;min-height:80px}
+#play-status{font-size:13px;color:var(--text2);text-align:center;min-height:20px}
+
+#human-area{flex-shrink:0;padding:8px 4px 4px;background:var(--bg2)}
+#human-cards{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:4px 0;min-height:76px}
+#human-actions{display:flex;gap:8px;justify-content:center;padding:6px 0 4px}
+
+/* Cards */
+.card{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:var(--card-w);height:var(--card-h);background:#fff;border:1.5px solid #ccc;border-radius:6px;cursor:pointer;transition:transform .12s,box-shadow .12s;box-shadow:0 1px 3px rgba(0,0,0,.25);position:relative;flex-shrink:0}
+.card .rank{font-size:15px;font-weight:700;line-height:1.1}
+.card .suit{font-size:13px;line-height:1}
+.card.red{color:var(--red)}
+.card.black{color:#222}
+.card:hover{transform:translateY(-3px)}
+.card.selected{transform:translateY(-14px);border-color:var(--green);box-shadow:0 2px 10px rgba(76,175,80,.5)}
+.card.playable{opacity:1}
+.card.unplayable{opacity:.5;cursor:default}
+.card.wild{background:linear-gradient(135deg,#fff,#fff3e0);border-color:#ffb300;color:#e65100}
+.card.wild .rank{font-size:13px}
+
+.card-small{width:36px;height:52px}
+.card-small .rank{font-size:12px}
+.card-small .suit{font-size:10px}
+
+.card-played{width:52px;height:72px;border-color:#888;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.card-played .rank{font-size:18px}
+.card-played .suit{font-size:15px}
+
+/* Messages */
+#message-bar{padding:4px 12px;background:var(--bg2);font-size:12px;color:var(--text2);text-align:center;min-height:24px;flex-shrink:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-content{background:var(--bg2);border-radius:12px;padding:24px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:10px;right:16px;font-size:24px;cursor:pointer;color:var(--text2)}
+.rules-text h3{margin:16px 0 6px;color:var(--accent);font-size:15px}
+.rules-text p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:6px}
+
+/* Result */
+.result-content{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:20px;gap:16px}
+.result-title{font-size:28px;color:var(--accent)}
+.result-winner{font-size:18px;text-align:center}
+.result-scores{width:100%;max-width:300px}
+.score-row{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #333;font-size:14px}
+.score-row:last-child{border-bottom:none}
+.score-row .name{color:var(--text2)}
+.score-row .score{font-weight:bold}
+.score-row.winner .name,.score-row.winner .score{color:var(--accent)}
+.result-buttons{display:flex;flex-direction:column;gap:10px;width:200px;margin-top:12px}
+
+/* Notification animation */
+.notification{animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Mobile adjustments */
+@media(max-width:400px){
+  :root{--card-w:40px;--card-h:58px}
+  .card-small{width:30px;height:44px}
+  .card-played{width:44px;height:62px}
+  .card-played .rank{font-size:15px}
+  .card-played .suit{font-size:12px}
+  .game-title{font-size:36px}
+  .card-back{width:22px;height:34px}
+  #human-cards{gap:3px}
+  .btn{padding:8px 16px;font-size:13px}
+}
+
+/* Hint highlight */
+.hint-card{border-color:var(--accent)!important;box-shadow:0 0 0 2px var(--accent)!important}

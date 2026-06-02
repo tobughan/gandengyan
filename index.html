@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<title>干瞪眼</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <div id="screen-menu" class="screen active">
+    <div class="menu-content">
+      <h1 class="game-title">干瞪眼</h1>
+      <p class="game-subtitle">卡牌对战</p>
+      <div class="menu-buttons">
+        <button class="btn btn-primary btn-large" onclick="UI.showSetup()">开始游戏</button>
+        <button class="btn btn-secondary" onclick="UI.showRules()">游戏规则</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-setup" class="screen">
+    <div class="setup-content">
+      <h2>游戏设置</h2>
+      <div class="setting-group">
+        <label class="setting-label">玩家人数</label>
+        <div class="option-group" id="player-count-options">
+          <button class="option-btn" data-value="3">3人</button>
+          <button class="option-btn active" data-value="4">4人</button>
+          <button class="option-btn" data-value="5">5人</button>
+        </div>
+      </div>
+      <div class="setting-group">
+        <label class="setting-label">AI难度</label>
+        <div class="option-group" id="ai-difficulty-options">
+          <button class="option-btn" data-value="easy">简单</button>
+          <button class="option-btn active" data-value="normal">普通</button>
+          <button class="option-btn" data-value="hard">困难</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="UI.startGame()">开始游戏</button>
+      <button class="btn btn-link" onclick="UI.showMenu()">返回</button>
+    </div>
+  </div>
+
+  <div id="screen-dice" class="screen">
+    <div class="dice-content">
+      <h2>摇骰子定庄家</h2>
+      <div id="dice-players" class="dice-players"></div>
+      <button id="dice-roll-btn" class="btn btn-primary btn-large" onclick="UI.rollDice()">摇骰子</button>
+      <div id="dice-result-msg" class="dice-result-msg"></div>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <div id="game-header">
+      <button class="btn-icon" onclick="UI.showMenu()">←</button>
+      <span id="game-info">回合 1</span>
+      <span id="deck-count">底牌 39</span>
+    </div>
+    <div id="game-board">
+      <div id="ai-area"></div>
+      <div id="play-area">
+        <div id="play-cards"></div>
+        <div id="play-status"></div>
+      </div>
+      <div id="human-area">
+        <div id="human-cards"></div>
+        <div id="human-actions">
+          <button id="btn-play" class="btn btn-primary" onclick="UI.playSelected()" disabled>出牌</button>
+          <button id="btn-pass" class="btn btn-secondary" onclick="UI.pass()">过牌</button>
+          <button id="btn-hint" class="btn btn-outline" onclick="UI.showHint()">提示</button>
+        </div>
+      </div>
+    </div>
+    <div id="message-bar"></div>
+  </div>
+
+  <div id="screen-gameover" class="screen">
+    <div class="result-content">
+      <h2 class="result-title">游戏结束</h2>
+      <p style="color:#ff4757;font-size:14px;margin:0">有玩家积分归零！</p>
+      <div id="gameover-detail" class="result-scores"></div>
+      <div class="result-buttons">
+        <button class="btn btn-primary" onclick="UI.fullRestart()">重新开局</button>
+        <button class="btn btn-secondary" onclick="UI.showMenu()">返回菜单</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-result" class="screen">
+    <div class="result-content">
+      <h2 class="result-title">游戏结束</h2>
+      <div id="result-winner" class="result-winner"></div>
+      <div id="result-scores" class="result-scores"></div>
+      <div class="result-buttons">
+        <button class="btn btn-primary" onclick="UI.quickRestart()">再来一局</button>
+        <button class="btn btn-secondary" onclick="UI.showMenu()">返回菜单</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-rules" class="modal-overlay" onclick="if(event.target===this)UI.hideRules()">
+    <div class="modal-content">
+      <span class="modal-close" onclick="UI.hideRules()">&times;</span>
+      <h2>游戏规则</h2>
+      <div class="rules-text">
+        <h3>基础规则</h3>
+        <p>使用55张牌（52张扑克+大小王+听用牌），3-5人对战。庄家发6张，闲家5张。</p>
+        <h3>接牌规则</h3>
+        <p>必须使用相同牌型、恰好大1点的牌来接。2可以接任意单张/对子。</p>
+        <h3>牌型</h3>
+        <p>单张、对子、顺子(3+)、连对(4+)、炸弹(3+)、王炸</p>
+        <h3>炸弹层级</h3>
+        <p>3张=1炸, 4张=2炸&hellip;7张=5炸, 王炸=2炸且最大</p>
+        <h3>万能牌</h3>
+        <p>大王、小王、听用牌可替代任意点数配牌，不可单独打出</p>
+        <h3>2的特殊限制</h3>
+        <p>2不可作为最后一手打出。手牌剩2张含2时，必须先出2。</p>
+        <h3>计分</h3>
+        <p>基础分 = 剩余牌数 × (1 + 总炸数)。关状态(庄家只出1次/闲家未出牌) = 20 + 10×总炸数。</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/config.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/rules.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
