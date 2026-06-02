@@ -7,5 +7,11 @@ self.addEventListener('activate', e => {
   e.waitUntil(clients.claim());
 });
 self.addEventListener('fetch', e => {
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+  e.respondWith(
+    caches.match(e.request).then(r => {
+      if (r) return r;
+      if (e.request.mode === 'navigate') return caches.match('index.html');
+      return fetch(e.request);
+    })
+  );
 });

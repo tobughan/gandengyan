@@ -299,11 +299,17 @@ const UI = {
 };
 
 /* Initialize game on load */
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => { const g = new Game(); UI.init(g); });
-} else {
+function init() {
   const g = new Game();
   UI.init(g);
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
 }
 
 /* Result screen / Game over screen */
