@@ -2,7 +2,7 @@
   "name": "干瞪眼",
   "short_name": "干瞪眼",
   "description": "干瞪眼卡牌对战游戏，支持3-5人对战，纯CSS卡牌渲染，三级AI难度",
-  "start_url": "index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a2e",
   "theme_color": "#1a1a2e",
