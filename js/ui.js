@@ -298,12 +298,28 @@ const UI = {
   }
 };
 
+/* PWA install prompt */
+UI._deferredPrompt = null;
+if ('beforeinstallprompt' in window) {
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    UI._deferredPrompt = e;
+    const btn = document.getElementById('btn-install');
+    if (btn) btn.style.display = 'block';
+  });
+  window.addEventListener('appinstalled', () => {
+    UI._deferredPrompt = null;
+    const btn = document.getElementById('btn-install');
+    if (btn) btn.style.display = 'none';
+  });
+}
+
 /* Initialize game on load */
 function init() {
   const g = new Game();
   UI.init(g);
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.register('/gandengyan/sw.js').catch(e => console.warn('SW:', e));
   }
 }
 if (document.readyState === 'loading') {
