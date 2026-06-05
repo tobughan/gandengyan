@@ -91,6 +91,10 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:
 /* Messages */
 #message-bar{padding:4px 12px;background:var(--bg2);font-size:12px;color:var(--text2);text-align:center;min-height:24px;flex-shrink:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 
+.baodan-badge{display:inline-block;background:#ff4757;color:#fff;font-size:11px;font-weight:bold;padding:1px 6px;border-radius:3px;animation:baodan-pulse 1s ease-in-out infinite;margin-left:4px}
+@keyframes baodan-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+#human-area.baodan{box-shadow:inset 0 0 20px rgba(255,71,87,0.5);border:1px solid #ff4757;border-radius:8px}
+
 /* Modal */
 .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.active{display:flex}

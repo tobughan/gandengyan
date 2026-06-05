@@ -140,7 +140,8 @@ const UI = {
       const div = document.createElement('div');
       div.className = `ai-player${this.game.currentPlayerIndex === i ? ' active' : ''}`;
       const backs = Array.from({length: Math.min(p.hand.length, 12)}, () => '<span class="card-back"></span>').join('');
-      div.innerHTML = `<div class="name">${p.name}</div><div class="back-cards">${backs}</div><div class="count">${p.hand.length} \u5f20</div>`;
+      const badge = p.hand.length === 1 ? '<span class="baodan-badge">\u62a5\u5355\uff01</span>' : '';
+      div.innerHTML = `<div class="name">${p.name}${badge}</div><div class="back-cards">${backs}</div><div class="count">${p.hand.length} \u5f20</div>`;
       area.appendChild(div);
     }
   },
@@ -164,6 +165,9 @@ const UI = {
 
   renderHumanHand() {
     const area = document.getElementById('human-cards');
+    const humanArea = document.getElementById('human-area');
+    const p0 = this.game.players[0];
+    humanArea.classList.toggle('baodan', p0 && p0.hand.length === 1);
     area.innerHTML = '';
     const p = this.game.players[0];
     if (!p) return;

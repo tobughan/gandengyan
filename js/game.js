@@ -178,6 +178,8 @@ class Game {
     };
     this.addMessage(`${player.name} \u51fa: ${typeNames[play.type]||''} [${cards.map(c=>c.displayName).join(' ')}]`);
 
+    if (player.hand.length === 1) this.addMessage(`\u26a0 ${player.name} \u62a5\u5355\uff01`);
+
     this.lastPlay = { playerIndex, play };
     this.passCount = 0;
     this.roundLeader = playerIndex;
