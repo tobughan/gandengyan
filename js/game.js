@@ -307,10 +307,12 @@ class Game {
     }
 
     const winnerName = winner ? winner.name : '';
-    return {winnerName, loserScores, totalBombs: this.totalBombs, cumulativeScores: [...this.cumulativeScores]};
+    const winnerIndex = winner ? this.players.indexOf(winner) : -1;
+    return {winnerName, winnerIndex, loserScores, totalBombs: this.totalBombs, cumulativeScores: [...this.cumulativeScores]};
   }
 
   deductRoundScores() {
+    let totalDeducted = 0;
     for (let i = 0; i < this.players.length; i++) {
       const p = this.players[i];
       if (p.hand.length === 0) continue;
@@ -322,6 +324,12 @@ class Game {
       else
         score = p.hand.length * (1 + this.totalBombs);
       this.cumulativeScores[i] -= score;
+      totalDeducted += score;
+    }
+    const winner = this.players.find(p => p.hand.length === 0);
+    if (winner) {
+      const wi = this.players.indexOf(winner);
+      this.cumulativeScores[wi] += totalDeducted;
     }
   }
 

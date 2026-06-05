@@ -339,13 +339,13 @@ UI.render = function() {
     const result = this.game.calculateScores();
     const detail = document.getElementById('gameover-detail');
     detail.innerHTML = '';
-    const sorted = result.loserScores.map(s => ({...s, cumulative: this.game.cumulativeScores[s.index]}));
-    sorted.sort((a, b) => a.cumulative - b.cumulative);
-    for (const s of sorted) {
+    const all = this.game.players.map((p, i) => ({name: p.name, score: result.cumulativeScores[i], isHuman: p.isHuman}));
+    all.sort((a, b) => a.score - b.score);
+    for (const s of all) {
       const div = document.createElement('div');
       div.className = 'score-row';
-      div.innerHTML = `<span class="name">${s.name}</span><span class="score">${s.cumulative}\u5206 (-\u2060${s.score})</span>`;
-      if (s.cumulative <= 0) div.style.color = '#ff4757';
+      div.innerHTML = `<span class="name">${s.name}</span><span class="score">${s.score}</span>`;
+      if (s.score <= 0) div.style.color = '#ff4757';
       if (s.isHuman) div.classList.add('winner');
       detail.appendChild(div);
     }
@@ -367,7 +367,8 @@ UI.render = function() {
     const cumuEl = document.createElement('div');
     cumuEl.className = 'score-row';
     cumuEl.style.cssText = 'border-top:1px solid #333;margin-top:6px;padding-top:6px;font-size:13px';
-    cumuEl.innerHTML = `<span>\u5269\u4f59\u79ef\u5206</span><span>${result.loserScores.map(s => s.name + ': ' + result.cumulativeScores[s.index]).join(' | ')}</span>`;
+    const allScores = this.game.players.map((p, i) => `${p.name}: ${result.cumulativeScores[i]}`);
+    cumuEl.innerHTML = `<span>\u79ef\u5206</span><span>${allScores.join(' | ')}</span>`;
     scoresEl.appendChild(cumuEl);
     return;
   }
